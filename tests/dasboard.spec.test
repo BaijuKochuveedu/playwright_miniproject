@@ -1,0 +1,40 @@
+import { test, expect } from '@playwright/test';
+
+test.describe('Horizontal Menu Tests', () => {
+  
+  // Before each test, go to your menu page
+  test.beforeEach(async ({ page }) => {
+    await page.goto('http://localhost:8080'); // change to your local/test URL
+  });
+
+  test('should display all menu items', async ({ page }) => {
+    const menuItems = await page.locator('ul li a');
+    await expect(menuItems).toHaveCount(4); // Home, About, Services, Contact
+
+    const expectedTexts = ['Home', 'About', 'Services', 'Contact'];
+    for (let i = 0; i < expectedTexts.length; i++) {
+      await expect(menuItems.nth(i)).toHaveText(expectedTexts[i]);
+    }
+  });
+
+  test('should navigate correctly when clicking menu items', async ({ page }) => {
+    // Example: clicking each link and verifying URL fragment
+    await page.click('text=Home');
+    await expect(page).toHaveURL(/#home/);
+
+    await page.click('text=About');
+    await expect(page).toHaveURL(/#about/);
+
+    await page.click('text=Services');
+    await expect(page).toHaveURL(/#services/);
+
+    await page.click('text=Contact');
+    await expect(page).toHaveURL(/#contact/);
+  });
+
+  test('should highlight active menu item', async ({ page }) => {
+    const homeLink = page.locator('ul li a', { hasText: 'Home' });
+    await expect(homeLink).toHaveClass(/active/); // Checks that "Home" has 'active' class
+  });
+
+});

@@ -13,3 +13,14 @@ test('should navigate to Playwright docs and verify title', async ({ page }) => 
   expect(isVisible).toBe(true); // Asserts that the text is visible
   console.log(`Is "Your visible text" visible? ${isVisible}`);
 });
+
+test.describe.parallel('parallel group', () => {
+  test('test 1', async ({ page }) => {
+    await page.goto('http://127.0.0.1:61101/html/services.html');
+    await expect(page).toHaveTitle(/services/);
+  });
+test('test 2', async ({ page }) => {
+    await page.goto('http://127.0.0.1:61101/html/contact.html');
+    await expect(page).toHaveTitle(/contact/);
+  });
+});
